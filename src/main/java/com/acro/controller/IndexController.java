@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.acro.entity.Comment;
 import com.acro.entity.Post;
+import com.acro.repository.CommentRepo;
 import com.acro.repository.PostRepo;
 import com.acro.services.PostServices;
 
@@ -25,6 +27,11 @@ public class IndexController {
 	
 	@Autowired
 	PostServices pserv;
+	
+	@Autowired
+	CommentRepo commentRepo;
+	
+	
 
 		
 	@PostMapping
@@ -64,7 +71,7 @@ public class IndexController {
 
     @GetMapping("/{id}/comments")
     public List<Comment> getComments(@PathVariable String id) {
-        return postRepo.findById(id)
+        return PostRepo.findById(id)
                 .map(Post::getComments)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
     }
