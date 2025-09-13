@@ -54,7 +54,26 @@ public class IndexController {
     }
 
     
-    
+    @PostMapping("/{id}/comments")
+    public Comment addComment(@PathVariable String id, @RequestBody Comment comment) {
+        return postRepo.findById(id).map(post -> {
+            comment.setPost(post);
+            return commentRepo.save(comment);
+        }).orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<Comment> getComments(@PathVariable String id) {
+        return postRepo.findById(id)
+                .map(Post::getComments)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+    @DeleteMapping("/comments/{commentId}")
+    public String deleteComment(@PathVariable String commentId) {
+        commentRepo.deleteById(commentId);
+        return "Comment deleted!";
+    }
+
 };
 	
 
